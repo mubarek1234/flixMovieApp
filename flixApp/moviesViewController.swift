@@ -32,10 +32,6 @@ class moviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 self.movies = dataDictionary["results"] as! [[String:Any]]
                 self.movieList.reloadData()
-                // TODO: Get the array of movies
-                // TODO: Store the movies in a property to use elsewhere
-                // TODO: Reload your table view data
-                
             }
         }
         task.resume()
@@ -56,11 +52,24 @@ class moviesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let baseUrl = "https://image.tmdb.org/t/p/w185"
         let imageUrl = movie["poster_path"] as! String
         let posterUrl = URL(string: baseUrl+imageUrl)
-        print(posterUrl)
         
         cell.movieImage.af_setImage(withURL: posterUrl!)
         
         return cell
+    }
+    
+    //Preparation to go to the details page
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let cell = sender as! UITableViewCell
+        let indexPath = movieList.indexPath(for: cell)!
+        let movie = movies[indexPath.row]
+        
+        let detailsVC = segue.destination as! movieDetailsViewController
+        detailsVC.movie = movie
+        
+        movieList.deselectRow(at: indexPath, animated: true)
+        
+        
     }
 
 
